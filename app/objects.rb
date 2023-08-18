@@ -7,3 +7,9 @@ load "#{path}/objects/fantrax_stat.rb"
 
 load "#{path}/objects/fantrax_store.rb"
 
+Obj.classes[:fantrax_stat] = Obj::FantraxStat
+Obj.classes[:fantasy_team] = Obj::FantasyTeam
+Obj.classes[:baseball_team] = Obj::BaseballTeam
+Obj.classes[:baseball_player] = Obj::BaseballPlayer
+
+

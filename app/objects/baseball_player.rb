@@ -29,11 +29,31 @@ class Obj::BaseballPlayer < Obj
     })
   end
 
-  def fantrax_stat
-    fantrax_stats.to_a.first
+  def starting_pitcher?
+    positions.include?('SP')
   end
 
-  def self.from_csv(db, date, days_back, remote_id, name, team_name, positions, status, age, fantasy_pts, fantasy_ppg, roster_pct, roster_pct_chg)
+  def relief_pitcher?
+    positions.include?('RP')
+  end
+
+  def starting_only_pitcher?
+    positions == ['SP']
+  end
+
+  def relief_only_pitcher?
+    positions == ['RP']
+  end
+
+  def hitter?
+    (positions & ['C', '1B', '2B', '3B', 'SS', 'LF', 'RF', 'CF']).size > 0
+  end
+
+  def fantrax_stats_by_days_back(days_back)
+    fantrax_stats.select{|fs| fs.days_back == days_back}.first
+  end
+
+  def self.from_csv(remote_id, name, team_name, positions, status, age)
     remote_id = remote_id
     name = name
     if team_name != "(N/A)"
@@ -50,25 +70,9 @@ class Obj::BaseballPlayer < Obj
       fantasy_team = nil
     end
     age = age.to_i
-    fantasy_pts = fantasy_pts.to_f
-    fantasy_ppg = fantasy_ppg.to_f
-    roster_pct = roster_pct.to_f / 100.0
-    m = /([+-])?([\.\d]+)?/.match(roster_pct_chg)
-    if m[2]
-      if m[1] == '-'
-        roster_pct_chg = -(m[2].to_f)
-      else
-        roster_pct_chg = m[2].to_f
-      end
-    else
-      roster_pct_chg = 0.0
-    end
-    roster_pct_chg = roster_pct_chg / 100.0
-    fantrax_stat = FantraxStat.new(date, days_back, fantasy_ppg, fantasy_pts, roster_pct, roster_pct_chg)
     player = new(remote_id, name, positions, age)
     player.baseball_team = baseball_team
     player.fantasy_team = fantasy_team
-    player.fantrax_stats = [fantrax_stat]
     player
   end
 end

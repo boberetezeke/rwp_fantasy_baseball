@@ -1,6 +1,6 @@
 require 'csv'
 
-class Obj::FantraxStore < Obj::Store
+class Obj::BaseballStatStore < Obj::Store
   def initialize(db, directory)
     super()
     @db = db
