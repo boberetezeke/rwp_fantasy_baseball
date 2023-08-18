@@ -1,4 +1,6 @@
 class Obj::RotowireStat < Obj
+  belongs_to :baseball_player, :baseball_player_id, inverse_of: :rotowire_stats
+
   def self.default_display
     {
       sym_sets: {
@@ -6,8 +8,9 @@ class Obj::RotowireStat < Obj
       },
       fields: {
         id: { width: 35, type: :string, title: 'ID' },
-        rank: { width: 5, type: :integer, title: 'Rank' },
+        recorded_date: { width: 10, type: :date, title: 'Date' },
         stat_type: { width: 5, type: :string, title: 'Type' },
+        rank: { width: 5, type: :integer, title: 'Rank' },
         eta: { width: 10, type: :string, title: 'ETA' },
         level: { width: 10, type: :string, title: 'Level' },
 
@@ -33,11 +36,11 @@ class Obj::RotowireStat < Obj
     }
   end
 
-  def initialize(date, stat_type, rank, eta, level,
+  def initialize(recorded_date, stat_type, rank, eta, level,
                  at_bats, hrs, stolen_bases, strikeout_pct, walk_pct, average, on_base_pct, slugging_pct, ops,
                  innings_pitched, earned_run_average, whip, batters_struckout, batters_walked, strikeouts_per_nine, walks_per_nine, strikeouts_per_walks)
     super(:rotowire_stat, {
-      date: date,
+      recorded_date: recorded_date,
       stat_type: stat_type,
       rank: rank,
       eta: eta,

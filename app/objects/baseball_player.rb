@@ -2,6 +2,7 @@ class Obj::BaseballPlayer < Obj
   belongs_to :baseball_team, :baseball_team_id, inverse_of: :baseball_players
   belongs_to :fantasy_team, :fantasy_team_id, inverse_of: :baseball_players
   has_many :fantrax_stats, :fantrax_stat, :baseball_player_id, inverse_of: :baseball_player
+  has_many :rotowire_stats, :rotowire_stat, :baseball_player_id, inverse_of: :baseball_player
 
   def self.default_display
     {
@@ -62,7 +63,7 @@ class Obj::BaseballPlayer < Obj
     else
       baseball_team = nil
     end
-    positions = positions.split(/,/)
+    positions = positions&.split(/,/) || []
     if status != "FA"
       # fantasy_team = db.find_by(:fantasy_team, name: status) || db.add_obj(Obj::FantasyTeam.new(status))
       fantasy_team = Obj::FantasyTeam.new(status)

@@ -1,6 +1,7 @@
 require_relative '../../../ruby_world_prototype/app/objects/obj'
 require_relative '../../../ruby_world_prototype/app/objects/database'
 require_relative '../../../ruby_world_prototype/app/objects/store'
+require_relative '../../app/objects/baseball_stat_store'
 require_relative '../../app/objects/fantrax_store'
 require_relative '../../app/objects/baseball_player'
 require_relative '../../app/objects/baseball_team'
