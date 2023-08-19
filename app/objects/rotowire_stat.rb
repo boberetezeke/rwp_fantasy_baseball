@@ -11,11 +11,13 @@ class Obj::RotowireStat < Obj
         recorded_date: { width: 10, type: :date, title: 'Date' },
         stat_type: { width: 5, type: :string, title: 'Type' },
         rank: { width: 5, type: :integer, title: 'Rank' },
-        eta: { width: 10, type: :string, title: 'ETA' },
+        eta: { width: 6, type: :integer, title: 'ETA' },
+        year_signed: { width: 6, type: :integer, title: 'Signed' },
         level: { width: 10, type: :string, title: 'Level' },
 
         at_bats: { width: 5, type: :integer, title: 'AB' },
         hrs: { width: 5, type: :integer, title: 'HR' },
+        runs_batted_in: { width: 5, type: :integer, title: 'RBI'},
         stolen_bases: { width: 5, type: :integer, title: 'SB' },
         strikeout_pct: { width: 5, type: :float, format: "%.3f", title: 'K%' },
         walk_pct: { width: 5, type: :float, format: "%.3f", title: 'BB%' },
@@ -36,17 +38,19 @@ class Obj::RotowireStat < Obj
     }
   end
 
-  def initialize(recorded_date, stat_type, rank, eta, level,
-                 at_bats, hrs, stolen_bases, strikeout_pct, walk_pct, average, on_base_pct, slugging_pct, ops,
+  def initialize(recorded_date, stat_type, rank, eta, year_signed, level,
+                 at_bats, hrs, runs_batted_in, stolen_bases, strikeout_pct, walk_pct, average, on_base_pct, slugging_pct, ops,
                  innings_pitched, earned_run_average, whip, batters_struckout, batters_walked, strikeouts_per_nine, walks_per_nine, strikeouts_per_walks)
     super(:rotowire_stat, {
       recorded_date: recorded_date,
       stat_type: stat_type,
       rank: rank,
       eta: eta,
+      year_signed: year_signed,
       level: level,
       at_bats: at_bats,
       hrs: hrs,
+      runs_batted_in: runs_batted_in,
       stolen_bases: stolen_bases,
       strikeout_pct: strikeout_pct,
       walk_pct: walk_pct,

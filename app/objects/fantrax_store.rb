@@ -1,12 +1,6 @@
 require 'csv'
 
 class Obj::FantraxStore < Obj::BaseballStatStore
-  def initialize(db, directory)
-    super()
-    @db = db
-    @directory = directory
-  end
-
   def sync
     Dir["#{@directory}/*"].each do|fn|
       m = /Fantrax-(\d+)-(\d+)-(\d+)--(\d+)-days/.match(fn)

@@ -1,6 +1,12 @@
 require 'csv'
 
 class Obj::BaseballStatStore < Obj::Store
+  def initialize(db, directory)
+    super()
+    @db = db
+    @directory = directory
+  end
+
   def create_baseball_players(baseball_players)
     total = baseball_players.size
     baseball_players
