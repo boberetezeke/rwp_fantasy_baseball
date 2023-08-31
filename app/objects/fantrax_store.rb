@@ -1,8 +1,22 @@
 require 'csv'
 
 class Obj::FantraxStore < Obj::BaseballStatStore
+  def get_prospect_names_hash
+    prospect_names_hash = {}
+    Dir["#{@directory}/../rotowire/*"].each do |fn|
+      next unless fn =~ /prospects/
+
+      csv = CSV.read(fn)
+      csv[2..-1].each do |row|
+        prospect_names_hash[row[0]] = true
+      end
+    end
+    prospect_names_hash
+  end
+
   def sync
-    Dir["#{@directory}/*"].each do|fn|
+    prospect_names_hash = get_prospect_names_hash
+    Dir["#{@directory}/*"].each do |fn|
       m = /Fantrax-(\d+)-(\d+)-(\d+)--(\d+)-days/.match(fn)
       next unless m
 
@@ -23,20 +37,26 @@ class Obj::FantraxStore < Obj::BaseballStatStore
         roster_pct_chg = parse_roster_pct_chg(row['+/-'])
         player = Obj::BaseballPlayer.from_csv(remote_id, name, team_name, positions, status, age)
         fantrax_stat = Obj::FantraxStat.new(date, days_back, fantasy_ppg, fantasy_pts, roster_pct, roster_pct_chg)
-        player.fantrax_stats = [fantrax_stat]
+        player.fantrax_stats = [fantrax_stat] if fantrax_stat.fantasy_pts > 0.0
         player
       end
 
       baseball_players_with_stats =
         baseball_players
-          .select{|bp| bp.fantrax_stats.first.fantasy_pts > 0.0 }
+          .select do |bp|
+          fantrax_stat = bp.fantrax_stats.first
+          (fantrax_stat && fantrax_stat.fantasy_pts > 0.0) ||
+            prospect_names_hash.has_key?(bp.name)
+        end
 
-      create_baseball_players(baseball_players_with_stats)
+      create_baseball_players(baseball_players_with_stats, status_proc: status_proc)
     end
     nil
   end
 
   def attach_stat(baseball_player, db_baseball_player)
+    return if baseball_player.fantrax_stats.empty?
+
     db_fantrax_stat = create_fantrax_stat(baseball_player, db_baseball_player)
     db_baseball_player.fantrax_stats.push(db_fantrax_stat) unless find_fantrax_stat(db_fantrax_stat, db_baseball_player)
   end

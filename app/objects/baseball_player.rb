@@ -51,7 +51,7 @@ class Obj::BaseballPlayer < Obj
   end
 
   def fantrax_stats_by_days_back(days_back)
-    fantrax_stats.select{|fs| fs.days_back == days_back}.first
+    fantrax_stats.select{|fs| fs.days_back == days_back}.sort_by{|fs| fs.recorded_date}.reverse.first
   end
 
   def self.from_csv(remote_id, name, team_name, positions, status, age)
@@ -64,11 +64,15 @@ class Obj::BaseballPlayer < Obj
       baseball_team = nil
     end
     positions = positions&.split(/,/) || []
-    if status != "FA"
-      # fantasy_team = db.find_by(:fantasy_team, name: status) || db.add_obj(Obj::FantasyTeam.new(status))
-      fantasy_team = Obj::FantasyTeam.new(status)
-    else
+    if status.nil?
       fantasy_team = nil
+    else
+      if status != "FA"
+        # fantasy_team = db.find_by(:fantasy_team, name: status) || db.add_obj(Obj::FantasyTeam.new(status))
+        fantasy_team = Obj::FantasyTeam.new(status)
+      else
+        fantasy_team = nil
+      end
     end
     age = age.to_i
     player = new(remote_id, name, positions, age)

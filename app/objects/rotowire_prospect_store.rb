@@ -48,7 +48,7 @@ class Obj::RotowireProspectStore < Obj::RotowireStatStore
         player
       end.reject(&:nil?)
 
-      create_baseball_players(baseball_players)
+      create_baseball_players(baseball_players, status_proc: status_proc)
     end
     nil
   end

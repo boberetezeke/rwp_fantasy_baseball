@@ -50,5 +50,17 @@ class Obj::FantasyTeam < Obj
       top_players(days_back, baseball_players.select(&:relief_only_pitcher?), 4)
     player_average(players)
   end
+
+  def rotowire_total(stat_type)
+    baseball_players.map do |bp|
+      bp.rotowire_stats.find{|st| st.stat_type == stat_type}
+    end.reject(&:nil?).map do |st|
+      400 - st.rank
+    end.sum
+  end
+
+  def unranked_players
+    baseball_players.select{|bp| bp.rotowire_stats.empty?}.map{|bp| [bp.name, bp.fantrax_stats_by_days_back(7).fantasy_ppg]}
+  end
 end
 
