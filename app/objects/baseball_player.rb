@@ -4,6 +4,8 @@ class Obj::BaseballPlayer < Obj
   has_many :fantrax_stats, :fantrax_stat, :baseball_player_id, inverse_of: :baseball_player
   has_many :rotowire_stats, :rotowire_stat, :baseball_player_id, inverse_of: :baseball_player
 
+  type_sym :baseball_player
+
   def self.default_display
     {
       sym_sets: {
@@ -63,7 +65,7 @@ class Obj::BaseballPlayer < Obj
     else
       baseball_team = nil
     end
-    positions = positions&.split(/,/) || []
+    # positions = positions&.split(/,/) || []
     if status.nil?
       fantasy_team = nil
     else

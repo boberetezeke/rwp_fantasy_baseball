@@ -1,5 +1,7 @@
 class Obj::FantasyTeam < Obj
-  has_many :baseball_players, :basebase_player, :fantasy_team_id, inverse_of: :fantasy_team
+  has_many :baseball_players, :baseball_player, :fantasy_team_id, inverse_of: :fantasy_team
+
+  type_sym :fantasy_team
 
   def self.default_display
     {

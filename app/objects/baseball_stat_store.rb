@@ -2,6 +2,7 @@ require 'csv'
 
 class Obj::BaseballStatStore < Obj::Store
   def initialize(db, directory)
+    puts "BaseballStatStore: directory: #{directory}"
     super()
     @db = db
     @directory = directory
@@ -20,8 +21,15 @@ class Obj::BaseballStatStore < Obj::Store
       db_baseball_team = find_or_add_baseball_team(baseball_player.baseball_team) if baseball_player.baseball_team
       db_fantasy_team = find_or_add_fantasy_team(baseball_player.fantasy_team) if baseball_player.fantasy_team
 
-      db_baseball_player.baseball_team = db_baseball_team if db_baseball_team
-      db_baseball_player.fantasy_team = db_fantasy_team if db_fantasy_team
+      if db_baseball_team
+        db_baseball_player.baseball_team = db_baseball_team
+        db_baseball_player.save
+      end
+      if db_fantasy_team
+        db_baseball_player.fantasy_team = db_fantasy_team
+        db_baseball_player.save
+      end
+
       attach_stat(baseball_player, db_baseball_player)
     end
   end
@@ -41,6 +49,8 @@ class Obj::BaseballStatStore < Obj::Store
     else
       status_proc.call("adding player: #{baseball_player.name}")
       db_baseball_player = baseball_player.dup
+      db_baseball_player.baseball_team = nil
+      db_baseball_player.fantasy_team = nil
       @db.add_obj(db_baseball_player)
     end
     db_baseball_player
@@ -58,9 +68,12 @@ class Obj::BaseballStatStore < Obj::Store
   def find_or_add_fantasy_team(fantasy_team)
     return nil unless fantasy_team
 
+    puts "fantasy_team: #{fantasy_team.name}"
+
     db_fantasy_team = @db.find_by(:fantasy_team, { name: fantasy_team.name })
     return db_fantasy_team if db_fantasy_team
 
+    puts "adding fantasy_team: #{fantasy_team.name}"
     @db.add_obj(fantasy_team.dup)
   end
 end

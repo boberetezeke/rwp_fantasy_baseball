@@ -1,6 +1,8 @@
 class Obj::RotowireStat < Obj
   belongs_to :baseball_player, :baseball_player_id, inverse_of: :rotowire_stats
 
+  type_sym :rotowire_stat
+
   def self.default_display
     {
       sym_sets: {

@@ -21,4 +21,19 @@ Obj.classes[:fantrax_store] = Obj::FantraxStore
 Obj.classes[:rotowire_prospect_store] = Obj::RotowireProspectStore
 Obj.classes[:rotowire_dynasty_store] = Obj::RotowireDynastyStore
 
-
+class Obj::FantasyBaseball
+  module Setup
+    def self.classes
+      [
+        Obj::FantraxStat,
+        Obj::RotowireStat,
+        Obj::FantasyTeam,
+        Obj::BaseballTeam,
+        Obj::BaseballPlayer,
+        # Obj::FantraxStore,
+        # Obj::RotowireProspectStore,
+        # Obj::RotowireDynastyStore
+      ]
+    end
+  end
+end

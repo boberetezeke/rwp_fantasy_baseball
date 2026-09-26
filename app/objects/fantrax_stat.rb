@@ -1,6 +1,8 @@
 class Obj::FantraxStat < Obj
   belongs_to :baseball_player, :baseball_player_id, inverse_of: :fantrax_stats
 
+  type_sym :fantrax_stat
+
   def self.default_display
     {
       sym_sets: {

@@ -3,7 +3,7 @@ require 'csv'
 class Obj::FantraxStore < Obj::BaseballStatStore
   def get_prospect_names_hash
     prospect_names_hash = {}
-    Dir["#{@directory}/../rotowire/*"].each do |fn|
+    Dir["#{@directory}/../rotowire/RW_*"].each do |fn|
       next unless fn =~ /prospects/
 
       csv = CSV.read(fn)
@@ -17,8 +17,11 @@ class Obj::FantraxStore < Obj::BaseballStatStore
   def sync
     prospect_names_hash = get_prospect_names_hash
     Dir["#{@directory}/*"].each do |fn|
-      m = /Fantrax-(\d+)-(\d+)-(\d+)--(\d+)-days/.match(fn)
+      puts "fn: #{fn}"
+      m = /FT_Fantrax-(\d+)-(\d+)-(\d+)--(\d+)-days/.match(fn)
       next unless m
+
+      puts "MATCH"
 
       date = Date.new(m[1].to_i, m[2].to_i, m[3].to_i)
       days_back = m[4].to_i
@@ -33,7 +36,7 @@ class Obj::FantraxStore < Obj::BaseballStatStore
         status = row['Status']
         fantasy_pts = row['FPts'].to_f
         fantasy_ppg = row['FP/G'].to_f
-        roster_pct = row['Ros %'].to_f / 100.0
+        roster_pct = row['Ros'].to_f / 100.0
         roster_pct_chg = parse_roster_pct_chg(row['+/-'])
         player = Obj::BaseballPlayer.from_csv(remote_id, name, team_name, positions, status, age)
         fantrax_stat = Obj::FantraxStat.new(date, days_back, fantasy_ppg, fantasy_pts, roster_pct, roster_pct_chg)
