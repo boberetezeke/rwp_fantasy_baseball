@@ -39,7 +39,7 @@ class Obj::FantraxStore < Obj::BaseballStatStore
         roster_pct = row['Ros'].to_f / 100.0
         roster_pct_chg = parse_roster_pct_chg(row['+/-'])
         player = Obj::BaseballPlayer.from_csv(remote_id, name, team_name, positions, status, age)
-        fantrax_stat = Obj::FantraxStat.new(date, days_back, fantasy_ppg, fantasy_pts, roster_pct, roster_pct_chg)
+        fantrax_stat = Obj::FantraxStat.new(date-days_back+1, date, fantasy_ppg, fantasy_pts, roster_pct, roster_pct_chg)
         player.fantrax_stats = [fantrax_stat] if fantrax_stat.fantasy_pts > 0.0
         player
       end
@@ -60,8 +60,11 @@ class Obj::FantraxStore < Obj::BaseballStatStore
   def attach_stat(baseball_player, db_baseball_player)
     return if baseball_player.fantrax_stats.empty?
 
-    db_fantrax_stat = create_fantrax_stat(baseball_player, db_baseball_player)
-    db_baseball_player.fantrax_stats.push(db_fantrax_stat) unless find_fantrax_stat(db_fantrax_stat, db_baseball_player)
+    fantrax_stat = baseball_player.fantrax_stats.first
+    unless find_fantrax_stat(fantrax_stat, db_baseball_player)
+      create_fantrax_stat(baseball_player, db_baseball_player)
+      # db_baseball_player.fantrax_stats.push(db_fantrax_stat)
+    end
   end
 
   def parse_roster_pct_chg(roster_pct_chg)
@@ -78,10 +81,10 @@ class Obj::FantraxStore < Obj::BaseballStatStore
     roster_pct_chg / 100.0
   end
 
-  def find_fantrax_stat(db_fantrax_stat, baseball_player)
-    baseball_player.fantrax_stats.find do |fs|
-      fs.recorded_date == db_fantrax_stat.recorded_date &&
-        fs.days_back == db_fantrax_stat.days_back
+  def find_fantrax_stat(fantrax_stat, db_baseball_player)
+    db_baseball_player.fantrax_stats.to_a.find do |fs|
+      fs.start_date == fantrax_stat.start_date &&
+        fs.end_date == fantrax_stat.end_date
     end
   end
 

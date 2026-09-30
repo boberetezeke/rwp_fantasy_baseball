@@ -27,8 +27,8 @@ class Obj::FantasyBaseball::AddBaseClasses
       :fantrax_stat,
       {
         baseball_player_id: :integer,
-        recorded_date: :datetime,
-        days_back: :integer,
+        start_date: :date,
+        end_date: :date,
         fantasy_ppg: :float,
         fantasy_pts: :float,
         roster_pct: :float,

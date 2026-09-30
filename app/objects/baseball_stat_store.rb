@@ -51,6 +51,7 @@ class Obj::BaseballStatStore < Obj::Store
       db_baseball_player = baseball_player.dup
       db_baseball_player.baseball_team = nil
       db_baseball_player.fantasy_team = nil
+      db_baseball_player.fantrax_stats = []
       @db.add_obj(db_baseball_player)
     end
     db_baseball_player

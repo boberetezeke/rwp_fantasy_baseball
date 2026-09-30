@@ -10,8 +10,8 @@ class Obj::FantraxStat < Obj
       },
       fields: {
         id: { width: 35, type: :string, title: 'ID' },
-        recorded_date: { width: 10, type: :date, title: 'stat type' },
-        days_back: { width: 5, type: :integer, title: 'days back' },
+        start_date: { width: 10, type: :date, title: 'start date' },
+        end_date: { width: 10, type: :date, title: 'end date' },
         fantasy_ppg: { width: 10, type: :float, format: '%.2f', title: 'fpts/g' },
         fantasy_pts: { width: 10, type: :float, format: '%.2f', title: 'fpts' },
         roster_pct: { width: 10, type: :float, format: '%.2f', title: 'rstr %' },
@@ -20,10 +20,10 @@ class Obj::FantraxStat < Obj
     }
   end
 
-  def initialize(recorded_date, days_back, fantasy_ppg, fantasy_pts, roster_pct, roster_pct_chg)
+  def initialize(start_date, end_date, fantasy_ppg, fantasy_pts, roster_pct, roster_pct_chg)
     super(:fantrax_stat, {
-      recorded_date: recorded_date,
-      days_back: days_back,
+      start_date: start_date,
+      end_date: end_date,
       fantasy_ppg: fantasy_ppg,
       fantasy_pts: fantasy_pts,
       roster_pct: roster_pct,

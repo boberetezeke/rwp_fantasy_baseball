@@ -37,7 +37,17 @@ describe Obj::FantraxStore do
         expect(db.objs[:baseball_player].size).to eq(5)
       end
 
+      it 'doesnt add more baseball_player objects on a re-sync' do
+        subject.sync
+        expect(db.objs[:baseball_player].size).to eq(5)
+      end
+
       it 'builds fantasy_team objects' do
+        expect(db.objs[:fantasy_team].size).to eq(4)
+      end
+
+      it 'doesnt add more fantasy_team objects on a re-sync' do
+        subject.sync
         expect(db.objs[:fantasy_team].size).to eq(4)
       end
 
@@ -45,8 +55,94 @@ describe Obj::FantraxStore do
         expect(db.objs[:baseball_team].size).to eq(3)
       end
 
-      it 'builds fantrax_stat objects' do
+      it 'doesnt add more baseball_team objects on a re-sync' do
+        subject.sync
+        expect(db.objs[:baseball_team].size).to eq(3)
+      end
+
+      it 'builds the correct number of fantrax_stat objects for each baseball_player' do
         expect(db.objs[:baseball_player].all.map{|bp| bp.fantrax_stats.size}).to eq([2,2,2,2,2])
+      end
+
+      it 'doesnt add new stats on a re-sync' do
+        subject.sync
+        expect(db.objs[:baseball_player].all.map{|bp| bp.fantrax_stats.size}).to eq([2,2,2,2,2])
+      end
+
+      it 'builds fantrax_stat objects' do
+        fantrax_stats = db.objs[:baseball_player].all.map do |bp|
+          { name: bp.name,
+            stats: bp.fantrax_stats.to_a.map do |fs|
+              { start_date: fs.start_date,
+                end_date: fs.end_date,
+                points: fs.fantasy_pts
+              }
+            end.sort_by{ |st| st[:end_date] }
+          }
+        end.sort_by{ |st| st[:name] }
+
+        expect(fantrax_stats).to eq([
+          { name: 'Blake Snell',
+            stats: [
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 7),
+                points: 82.0
+              },
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 14),
+                points: 164.0
+              }
+            ]
+          },
+          { name: 'Braxton Garrett',
+            stats: [
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 7),
+                points: 68.0
+              },
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 14),
+                points: 100.0
+              },
+            ]
+          },
+          { name: 'Eddie Rosario',
+            stats: [
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 7),
+                points: 47.0
+              },
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 14),
+                points: 47.0
+              },
+            ]
+          },
+          { name: 'Elly De La Cruz',
+            stats: [
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 7),
+                points: 52.0
+              },
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 14),
+                points: 52.0
+              }
+            ]
+          },
+          { name: 'Jesus Luzardo',
+            stats: [
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 7),
+                points: 53.0
+              },
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 14),
+                points: 200.0
+              }
+            ]
+          }
+        ])
       end
 
       it 'has the correct stats in the fantrax object' do
