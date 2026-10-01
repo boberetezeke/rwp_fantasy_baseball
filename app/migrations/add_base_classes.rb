@@ -39,7 +39,7 @@ class Obj::FantasyBaseball::AddBaseClasses
       :rotowire_stat,
       {
         baseball_player_id: :integer,
-        recorded_date: :datetime,
+        recorded_date: :date,
         stat_type: :string,
         rank: :integer,
         eta: :integer,

@@ -1,9 +1,9 @@
 require 'csv'
 
 class Obj::BaseballStatStore < Obj::Store
-  def initialize(db, directory)
-    puts "BaseballStatStore: directory: #{directory}"
-    super()
+  def initialize(db, directory, status_proc: ->(str){ puts str })
+    # puts "BaseballStatStore: directory: #{directory}"
+    super(status_proc: status_proc)
     @db = db
     @directory = directory
   end
@@ -69,12 +69,12 @@ class Obj::BaseballStatStore < Obj::Store
   def find_or_add_fantasy_team(fantasy_team)
     return nil unless fantasy_team
 
-    puts "fantasy_team: #{fantasy_team.name}"
+    # puts "fantasy_team: #{fantasy_team.name}"
 
     db_fantasy_team = @db.find_by(:fantasy_team, { name: fantasy_team.name })
     return db_fantasy_team if db_fantasy_team
 
-    puts "adding fantasy_team: #{fantasy_team.name}"
+    # puts "adding fantasy_team: #{fantasy_team.name}"
     @db.add_obj(fantasy_team.dup)
   end
 end

@@ -3,7 +3,7 @@ require 'csv'
 class Obj::RotowireDynastyStore < Obj::RotowireStatStore
   def sync
     Dir["#{@directory}/*"].each do|fn|
-      m = /RW_Rotowire-(\d+)-(\d+)-(\d+)--dynasty/.match(fn)
+      m = /Rotowire-(\d+)-(\d+)-(\d+)--dynasty/.match(fn)
       next unless m
 
       date = Date.new(m[1].to_i, m[2].to_i, m[3].to_i)

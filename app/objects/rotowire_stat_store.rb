@@ -2,8 +2,14 @@ require 'csv'
 
 class Obj::RotowireStatStore < Obj::BaseballStatStore
   def attach_stat(baseball_player, db_baseball_player)
-    db_rotowire_stat = create_rotowire_stat(baseball_player, db_baseball_player)
-    db_baseball_player.rotowire_stats.push(db_rotowire_stat) unless find_rotowire_stat(db_rotowire_stat, db_baseball_player)
+    return if baseball_player.rotowire_stats.empty?
+
+    rotowire_stat = baseball_player.rotowire_stats.first
+    unless find_rotowire_stat(rotowire_stat, db_baseball_player)
+      create_rotowire_stat(baseball_player, db_baseball_player)
+    end
+    # db_rotowire_stat = create_rotowire_stat(baseball_player, db_baseball_player)
+    # db_baseball_player.rotowire_stats.push(db_rotowire_stat) unless find_rotowire_stat(db_rotowire_stat, db_baseball_player)
   end
 
   def find_rotowire_stat(db_rotowire_stat, baseball_player)

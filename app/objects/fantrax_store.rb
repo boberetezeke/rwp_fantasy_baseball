@@ -17,11 +17,11 @@ class Obj::FantraxStore < Obj::BaseballStatStore
   def sync
     prospect_names_hash = get_prospect_names_hash
     Dir["#{@directory}/*"].each do |fn|
-      puts "fn: #{fn}"
-      m = /FT_Fantrax-(\d+)-(\d+)-(\d+)--(\d+)-days/.match(fn)
+      status_proc.call("fn: #{fn}")
+      m = /Fantrax-(\d+)-(\d+)-(\d+)--(\d+)-days/.match(fn)
       next unless m
 
-      puts "MATCH"
+      status_proc.call("MATCH")
 
       date = Date.new(m[1].to_i, m[2].to_i, m[3].to_i)
       days_back = m[4].to_i
