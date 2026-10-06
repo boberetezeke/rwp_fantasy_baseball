@@ -37,14 +37,16 @@ class Obj::BaseballStatStore < Obj::Store
   def find_or_add_baseball_player(baseball_player, status_proc: ->(str){})
     if baseball_player.remote_id.nil?
       db_baseball_player = @db.find_by(:baseball_player, { name: baseball_player.name })
-      if db_baseball_player
-        status_proc.call("can't find player: #{baseball_player.name}")
+      unless db_baseball_player
+        status_proc.call("can't find player by name: #{baseball_player.name}")
       end
     else
       db_baseball_player = @db.find_by(:baseball_player, { remote_id: baseball_player.remote_id })
     end
     # puts "db_baseball_player: #{db_baseball_player}"
     if !db_baseball_player.nil?
+      # don't overwrite the remote_id if it already exists in the db
+      baseball_player.remote_id = db_baseball_player.remote_id if db_baseball_player.remote_id
       db_baseball_player.update(baseball_player)
     else
       status_proc.call("adding player: #{baseball_player.name}")

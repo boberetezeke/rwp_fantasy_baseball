@@ -106,18 +106,6 @@ describe Obj::FantraxStore do
               },
             ]
           },
-          { name: 'Eddie Rosario',
-            stats: [
-              { start_date: Date.new(2023, 7, 1),
-                end_date: Date.new(2023, 7, 7),
-                points: 47.0
-              },
-              { start_date: Date.new(2023, 7, 1),
-                end_date: Date.new(2023, 7, 14),
-                points: 47.0
-              },
-            ]
-          },
           { name: 'Elly De La Cruz',
             stats: [
               { start_date: Date.new(2023, 7, 1),
@@ -140,6 +128,18 @@ describe Obj::FantraxStore do
                 end_date: Date.new(2023, 7, 14),
                 points: 200.0
               }
+            ]
+          },
+          { name: 'Ronald Acuna',
+            stats: [
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 7),
+                points: 47.0
+              },
+              { start_date: Date.new(2023, 7, 1),
+                end_date: Date.new(2023, 7, 14),
+                points: 47.0
+              },
             ]
           }
         ])

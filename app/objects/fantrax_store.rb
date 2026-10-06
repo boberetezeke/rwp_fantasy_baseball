@@ -3,7 +3,7 @@ require 'csv'
 class Obj::FantraxStore < Obj::BaseballStatStore
   def get_prospect_names_hash
     prospect_names_hash = {}
-    Dir["#{@directory}/../rotowire/RW_*"].each do |fn|
+    Dir["#{@directory}/../rotowire/*"].each do |fn|
       next unless fn =~ /prospects/
 
       csv = CSV.read(fn)
@@ -15,10 +15,11 @@ class Obj::FantraxStore < Obj::BaseballStatStore
   end
 
   def sync
-    prospect_names_hash = get_prospect_names_hash
+    # prospect_names_hash = get_prospect_names_hash
+    prospect_names_hash = {}
     Dir["#{@directory}/*"].each do |fn|
       status_proc.call("fn: #{fn}")
-      m = /Fantrax-(\d+)-(\d+)-(\d+)--(\d+)-days/.match(fn)
+      m = /\/Fantrax-(\d+)-(\d+)-(\d+)--(\d+)-days/.match(fn)
       next unless m
 
       status_proc.call("MATCH")

@@ -40,3 +40,7 @@ end
 def team_names
   @db.objs[:fantasy_team].all.map(&:name)
 end
+
+def team(name)
+  @db.objs[:fantasy_team].all.find { |ft| ft.name == name }
+end
