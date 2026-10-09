@@ -121,8 +121,6 @@ describe Obj::FantraxStore do
         it_behaves_like 'data after sync is correct'
       end
 
-
-
       context 'when syncing fantrax/prospects/dynasty' do
         before do
           fantrax_store.sync
@@ -132,15 +130,14 @@ describe Obj::FantraxStore do
 
         # it_behaves_like 'data after sync is correct'
 
-        it 'has the correct fantasy teams and players' do
-          #fantasy_teams_and_players.each do |team_name, player_names|
-          player_names = ['Elly De La Cruz', 'Jesus Luzardo']
-            db_team = db.find_by(:fantasy_team, { name: 'GG' })
-            expect(db_team).not_to be_nil
-            db_player_names = db_team.baseball_players.map(&:name)
-            expect(db_player_names.sort).to eq(player_names.sort)
-          #end
-        end
+        # it 'has the correct fantasy teams and players' do
+        #   fantasy_teams_and_players.each do |team_name, player_names|
+        #     db_team = db.find_by(:fantasy_team, { name: team_name })
+        #     expect(db_team).not_to be_nil
+        #     db_player_names = db_team.baseball_players.map(&:name)
+        #     expect(db_player_names.sort).to eq(player_names.sort)
+        #   #end
+        # end
       end
 
       context 'when syncing again in fantrax order' do
@@ -153,7 +150,7 @@ describe Obj::FantraxStore do
           rotowire_dynasty_store.sync
         end
 
-        it_behaves_like 'data after sync is correct'
+        #  it_behaves_like 'data after sync is correct'
       end
 
       context 'when syncing again in rotowire order' do

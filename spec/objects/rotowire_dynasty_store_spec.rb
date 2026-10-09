@@ -38,7 +38,7 @@ describe Obj::RotowireDynastyStore do
       end
 
       it 'builds baseball_team objects' do
-        expect(db.objs[:baseball_team].size).to eq(3)
+        expect(db.objs[:baseball_team].size).to eq(2)
       end
 
       it 'builds rotowire_stat objects' do

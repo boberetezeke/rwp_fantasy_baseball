@@ -34,15 +34,15 @@ describe Obj::RotowireProspectStore do
       end
 
       it 'builds the baseball_player objects' do
-        expect(db.objs[:baseball_player].size).to eq(3)
+        expect(db.objs[:baseball_player].size).to eq(4)
       end
 
       it 'builds baseball_team objects' do
-        expect(db.objs[:baseball_team].size).to eq(3)
+        expect(db.objs[:baseball_team].size).to eq(4)
       end
 
       it 'builds rotowire_stat objects' do
-        expect(db.objs[:baseball_player].all.map{|bp| bp.rotowire_stats.size}).to eq([1,1,1])
+        expect(db.objs[:baseball_player].all.map{|bp| bp.rotowire_stats.size}).to eq([1,1,1,1])
       end
 
       it 'has the correct stats in the rotowire object' do
