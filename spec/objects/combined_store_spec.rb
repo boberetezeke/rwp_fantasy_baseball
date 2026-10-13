@@ -9,9 +9,9 @@ require_relative '../../app/migrations/add_base_classes'
 require 'csv'
 
 describe Obj::FantraxStore do
-  let(:db_type_class) { Obj::DatabaseAdapter::SqliteDb }
-  let(:db_test_filename) { 'test.sqlite3' }
-  context 'db_type_all' do
+  # let(:db_type_class) { Obj::DatabaseAdapter::SqliteDb }
+  # let(:db_test_filename) { 'test.sqlite3' }
+  db_type_all do
     describe '#sync' do
       let(:db) { Obj::Database.new(database_adapter_class: db_type_class, filename: db_test_filename) }
       let(:fantrax_store) { Obj::FantraxStore.new(db, 'spec/fixtures', status_proc: ->(str){}) }
@@ -56,7 +56,7 @@ describe Obj::FantraxStore do
       end
 
       before do
-        allow(Obj::Database).to receive(:database_adapter).and_return(Obj::DatabaseAdapter::SqliteDb)
+        # allow(Obj::Database).to receive(:database_adapter).and_return(Obj::DatabaseAdapter::SqliteDb)
         # allow(Obj::Database).to receive(:database_adapter).and_return(Obj::DatabaseAdapter::InMemoryDb)
         db.connect
         Obj::Database.migrate(Obj::Setup.migrations, db)
@@ -130,14 +130,14 @@ describe Obj::FantraxStore do
 
         # it_behaves_like 'data after sync is correct'
 
-        # it 'has the correct fantasy teams and players' do
-        #   fantasy_teams_and_players.each do |team_name, player_names|
-        #     db_team = db.find_by(:fantasy_team, { name: team_name })
-        #     expect(db_team).not_to be_nil
-        #     db_player_names = db_team.baseball_players.map(&:name)
-        #     expect(db_player_names.sort).to eq(player_names.sort)
-        #   #end
-        # end
+        it 'has the correct fantasy teams and players' do
+          fantasy_teams_and_players.each do |team_name, player_names|
+            db_team = db.find_by(:fantasy_team, { name: team_name })
+            expect(db_team).not_to be_nil
+            db_player_names = db_team.baseball_players.map(&:name)
+            expect(db_player_names.sort).to eq(player_names.sort)
+          end
+        end
       end
 
       context 'when syncing again in fantrax order' do
@@ -150,7 +150,7 @@ describe Obj::FantraxStore do
           rotowire_dynasty_store.sync
         end
 
-        #  it_behaves_like 'data after sync is correct'
+        it_behaves_like 'data after sync is correct'
       end
 
       context 'when syncing again in rotowire order' do

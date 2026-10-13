@@ -1,22 +1,7 @@
 require 'csv'
 
 class Obj::FantraxStore < Obj::BaseballStatStore
-  def get_prospect_names_hash
-    prospect_names_hash = {}
-    Dir["#{@directory}/../rotowire/*"].each do |fn|
-      next unless fn =~ /prospects/
-
-      csv = CSV.read(fn)
-      csv[2..-1].each do |row|
-        prospect_names_hash[row[0]] = true
-      end
-    end
-    prospect_names_hash
-  end
-
   def sync
-    # prospect_names_hash = get_prospect_names_hash
-    prospect_names_hash = {}
     Dir["#{@directory}/*"].each do |fn|
       status_proc.call("fn: #{fn}")
       m = /\/Fantrax-(\d+)-(\d+)-(\d+)--(\d+)-days/.match(fn)
@@ -50,7 +35,7 @@ class Obj::FantraxStore < Obj::BaseballStatStore
           .select do |bp|
           fantrax_stat = bp.fantrax_stats.first
           (fantrax_stat && fantrax_stat.fantasy_pts > 0.0) ||
-            prospect_names_hash.has_key?(bp.name)
+            bp.fantasy_team
         end
 
       create_baseball_players(baseball_players_with_stats, status_proc: status_proc)
